@@ -9,7 +9,7 @@ using Microsoft.OpenApi.Writers;
 
 namespace Mango.Services.CouponAPI.Controllers
 {
-    [Route("api/coupon")]
+    [Route("api/coup2on")]
     [ApiController]
     public class CouponAPIController : ControllerBase
     {
