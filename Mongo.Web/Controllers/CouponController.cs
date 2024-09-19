@@ -2,6 +2,7 @@
 using Mongo.Web.Models;
 using Mongo.Web.Services.IService;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace Mongo.Web.Controllers
 {
@@ -43,5 +44,27 @@ namespace Mongo.Web.Controllers
             }
             return View(model);
         }
-    }
+
+        public async Task<IActionResult> CouponDelete(int CouponId)
+        {
+            ResponseDto? response = await _couponService.GetCouponByIdAsync(CouponId);
+            if (response != null && response.IsSuccess)
+            {
+                CouponDto? model = JsonConvert.DeserializeObject<CouponDto>(Convert.ToString(response.Result));
+                return View(model);
+            }
+            return NotFound();
+        }
+
+        [HttpPost]
+		public async Task<IActionResult> CouponDelete(CouponDto couponDto)
+		{
+			ResponseDto? response = await _couponService.DeleteCouponAsync(couponDto.CouponId);
+			if (response != null && response.IsSuccess)
+			{
+				return RedirectToAction(nameof(CouponIndex));
+			}
+            return View(couponDto);
+		}
+	}
 }
