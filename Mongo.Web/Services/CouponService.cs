@@ -35,7 +35,7 @@ namespace Mongo.Web.Services
             return await _baseServices.SendAsync(new RequestDto()
             {
                 ApiType = Utility.SD.ApiType.GET,
-                Url = SD.CouponAPIBase + "/api/coupon"
+                Url = SD.CouponAPIBase + "/api/coupon/"
             });
         }
 

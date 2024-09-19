@@ -10,7 +10,8 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddHttpClient();
 builder.Services.AddHttpClient<ICouponService, CouponService>();
 //Add service to the container
-SD.CouponAPIBase = builder.Configuration["ServiceUrls : CouponAPI"];
+SD.CouponAPIBase = builder.Configuration["ServiceUrls:CouponAPI"];
+
 
 builder.Services.AddScoped<IBaseServices, BaseService>();
 builder.Services.AddScoped<ICouponService, CouponService>();
