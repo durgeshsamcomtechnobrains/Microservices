@@ -1,6 +1,6 @@
 ﻿using Mongo.Web.Models;
 
-namespace Mongo.Web.Services
+namespace Mongo.Web.Services.IService
 {
     public interface IBaseServices
     {

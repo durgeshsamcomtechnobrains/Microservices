@@ -1,7 +1,19 @@
+using Mongo.Web.Services;
+using Mongo.Web.Services.IService;
+using Mongo.Web.Utility;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddHttpClient();
+builder.Services.AddHttpClient<ICouponService, CouponService>();
+//Add service to the container
+SD.CouponAPIBase = builder.Configuration["ServiceUrls : CouponAPI"];
+
+builder.Services.AddScoped<IBaseServices, BaseService>();
+builder.Services.AddScoped<ICouponService, CouponService>();
 
 var app = builder.Build();
 
