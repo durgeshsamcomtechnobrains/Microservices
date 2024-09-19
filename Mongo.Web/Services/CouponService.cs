@@ -17,7 +17,7 @@ namespace Mongo.Web.Services
             { 
                 ApiType = Utility.SD.ApiType.POST, 
                 Data  = couponDto,
-                Url = SD.CouponAPIBase + "/api/coupon" 
+                Url = SD.CouponAPIBase + "/api/coupon/" 
             });
         }
 
