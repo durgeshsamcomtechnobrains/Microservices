@@ -9,7 +9,7 @@ using Microsoft.OpenApi.Writers;
 
 namespace Mango.Services.CouponAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/coup2on")]
     [ApiController]
     public class CouponAPIController : ControllerBase
     {
@@ -116,6 +116,7 @@ namespace Mango.Services.CouponAPI.Controllers
         }
 
         [HttpDelete]
+        [Route("{id:int}")]
         public ResponseDto delete(int Id)
         {
             try
