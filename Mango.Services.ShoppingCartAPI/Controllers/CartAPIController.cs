@@ -2,6 +2,7 @@
 using Mango.Services.ShoppingCartAPI.Data;
 using Mango.Services.ShoppingCartAPI.Models;
 using Mango.Services.ShoppingCartAPI.Models.Dto;
+using Mango.Services.ShoppingCartAPI.Service.IService;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,13 +15,64 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
         private ResponseDto _response;
         private IMapper _mapper;
         private readonly AppDbContext _db;
-        public CartAPIController(AppDbContext db,
+        private IProductService _productService;
+        public CartAPIController(AppDbContext db
+            , IProductService productService,
             IMapper mapper)
         {
             _db = db;
+            _productService = productService;
             this._response = new ResponseDto();
             _mapper = mapper;
         }
+
+        [HttpGet("GetCart/{userId}")]
+        public async Task<ResponseDto> GetCart(string userId)
+        {
+            try
+            {
+                CartDto cart = new();
+                var cartHeader = _db.CartHeaders.FirstOrDefault(u => u.UserId == userId);
+                if (cartHeader == null)
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = "No cart found for the user.";
+                    return _response;
+                }
+                cart.CartHeader = _mapper.Map<CartHeaderDto>(cartHeader);
+
+                // Enumerate the CartDetails query before mapping
+                var cartDetails = _db.CartDetails
+                    .Where(u => u.CartHeaderId == cartHeader.CartHeaderId)
+                    .ToList(); // Convert IQueryable to List
+
+                // Map to DTOs
+                cart.CartDetails = _mapper.Map<IEnumerable<CartDetailsDto>>(cartDetails);
+
+                IEnumerable<ProductDto> productDtos = await _productService.GetProducts();
+                
+                foreach (var item in cart.CartDetails)
+                {
+                    item.Product = productDtos.FirstOrDefault(u => u.ProductId == item.ProductId);
+
+                    // Check if product exists to avoid null reference
+                    if (item.Product != null)
+                    {
+                        cart.CartHeader.CartTotal += (item.Count * item.Product.Price);
+                    }
+                }
+
+                _response.Result = cart;
+                _response.IsSuccess = true;
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+            }
+            return _response;
+        }
+
 
         [HttpPost("CartUpsert")]
         public async Task<ResponseDto> CartUpsert(CartDto cartDto)
