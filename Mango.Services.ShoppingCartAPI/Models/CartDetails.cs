@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Mango.Services.ShoppingCartAPI.Models.Dto;
 using System.ComponentModel.DataAnnotations;
-using Mango.Services.ShoppingCartAPI.Models.Dto;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Mango.Services.ShoppingCartAPI.Models
 {
@@ -15,5 +15,6 @@ namespace Mango.Services.ShoppingCartAPI.Models
         [NotMapped]
         public ProductDto Product { get; set; }
         public int Count { get; set; }
+
     }
 }
